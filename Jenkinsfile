@@ -18,7 +18,6 @@ stages {
             }
         }
 
-
         stage('Code Checkout') {
             steps {
                 checkout([
@@ -47,8 +46,11 @@ stages {
 
         stage('Build Deploy Code') {
             when {
+
                 branch 'main'}
-           steps {
+ 
+            steps {
+
                 sh """
                 echo "Building Artifact"
                 """
@@ -56,6 +58,7 @@ stages {
                 sh """
                 echo "Deploying Code"
                 """
+
             
       }
    
@@ -64,6 +67,7 @@ stages {
 
     
 
-  }
+
+}
 
 }
