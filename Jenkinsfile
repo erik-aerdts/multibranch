@@ -47,9 +47,17 @@ stages {
 
         stage('Build Deploy Code') {
             when {
-                branch 'main'
+                branch 'main'}
+           steps {
+                sh """
+                echo "Building Artifact"
+                """
 
-        
+                sh """
+                echo "Deploying Code"
+                """
+            
+      }
    
             
       }
