@@ -46,7 +46,7 @@ stages {
 
         stage('Build Deploy Code') {
             when {
-                branch 'develop'
+                branch 'main'
             }
             steps {
                 sh """
