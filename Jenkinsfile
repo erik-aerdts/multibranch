@@ -8,7 +8,6 @@ pipeline {
 
   }
 stages {
-
         
         stage('Cleanup Workspace') {
             steps {
@@ -18,6 +17,7 @@ stages {
                 """
             }
         }
+
 
         stage('Code Checkout') {
             steps {
@@ -47,16 +47,10 @@ stages {
 
         stage('Build Deploy Code') {
             when {
-                branch 'develop'
-            }
-            steps {
-                sh """
-                echo "Building Artifact"
-                """
+                branch 'main'
 
-                sh """
-                echo "Deploying Code"
-                """
+        
+   
             
       }
 
