@@ -60,7 +60,7 @@ stages {
          
             def remote = [:];
             remote.name = "testserver";
-            remote.host = "172.17.1.21";
+            remote.host = "172.17.1.22";
             remote.allowAnyHosts = true;
             remote.user = "jenkins";
             remote.password = "jenkins";
@@ -74,7 +74,7 @@ stages {
             
       }
 
-    
+}    
 
 
 }
