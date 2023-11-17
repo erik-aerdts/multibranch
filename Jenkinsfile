@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']], 
+                    branches: [[name: '*/dev']], 
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
@@ -40,6 +40,7 @@ stages {
         stage('Getting source') {
           steps {
            echo 'Getting source..'
+
                 git branch: 'main',
                   url: 'https://github.com/erik-aerdts/multibranch.git'
                }
@@ -69,7 +70,9 @@ stages {
          
             def remote = [:];
             remote.name = "testserver";
+
             remote.host = "172.17.1.24";
+
             remote.allowAnyHosts = true;
             remote.user = "jenkins";
             remote.password = "jenkins";
