@@ -45,12 +45,16 @@ stages {
         }
 
         stage('Build Deploy Code') {
+<<<<<<< HEAD
             when {
 
                 branch 'main'}
  
             steps {
 
+=======
+           steps {
+>>>>>>> 5e8862c (deploy en html file)
                 sh """
                 echo "Building Artifact"
                 """
@@ -58,7 +62,23 @@ stages {
                 sh """
                 echo "Deploying Code"
                 """
+<<<<<<< HEAD
 
+=======
+           script {
+         
+            def remote = [:];
+            remote.name = "testserver";
+            remote.host = "172.17.1.21";
+            remote.allowAnyHosts = true;
+            remote.user = "jenkins";
+            remote.password = "jenkins";
+            
+            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
+            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
+            
+            }
+>>>>>>> 5e8862c (deploy en html file)
             
       }
    
