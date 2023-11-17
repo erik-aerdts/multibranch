@@ -45,16 +45,9 @@ stages {
         }
 
         stage('Build Deploy Code') {
-<<<<<<< HEAD
-            when {
-
-                branch 'main'}
  
-            steps {
 
-=======
            steps {
->>>>>>> 5e8862c (deploy en html file)
                 sh """
                 echo "Building Artifact"
                 """
@@ -62,9 +55,7 @@ stages {
                 sh """
                 echo "Deploying Code"
                 """
-<<<<<<< HEAD
 
-=======
            script {
          
             def remote = [:];
@@ -78,9 +69,7 @@ stages {
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
             }
->>>>>>> 5e8862c (deploy en html file)
             
-      }
    
             
       }
