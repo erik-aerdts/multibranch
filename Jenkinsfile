@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']], 
+                    branches: [[name: '*/fix']], 
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
@@ -36,6 +36,15 @@ stages {
             }
         }
 
+
+        stage('Getting source') {
+          steps {
+           echo 'Getting source..'
+                git branch: 'fix',
+                  url: 'https://github.com/erik-aerdts/multibranch.git'
+               }
+        }
+
         stage('Code Analysis') {
             steps {
                 sh """
@@ -45,12 +54,9 @@ stages {
         }
 
         stage('Build Deploy Code') {
-            when {
-
-                branch 'main'}
  
-            steps {
 
+           steps {
                 sh """
                 echo "Building Artifact"
                 """
@@ -59,13 +65,25 @@ stages {
                 echo "Deploying Code"
                 """
 
+           script {
+         
+            def remote = [:];
+            remote.name = "testserver";
+            remote.host = "172.17.1.22";
+            remote.allowAnyHosts = true;
+            remote.user = "jenkins";
+            remote.password = "jenkins";
             
-      }
+            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
+            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
+            
+            }
+            
    
             
       }
 
-    
+}    
 
 
 }
