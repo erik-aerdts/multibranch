@@ -36,6 +36,14 @@ stages {
             }
         }
 
+
+        stage('Getting source') {
+          steps {
+           echo 'Getting source..'
+                git branch: 'main',
+                  url: 'https://github.com/erik-aerdts/multibranch.git'
+               }
+
         stage('Code Analysis') {
             steps {
                 sh """
