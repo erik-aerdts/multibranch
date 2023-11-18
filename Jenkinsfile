@@ -41,7 +41,7 @@ stages {
           steps {
            echo 'Getting source..'
 
-                git branch: 'dev',
+                git branch: 'main',
                   url: 'https://github.com/erik-aerdts/multibranch.git'
                }
         }
@@ -71,7 +71,7 @@ stages {
             def remote = [:];
             remote.name = "testserver";
 
-            remote.host = "172.17.1.23";
+            remote.host = "172.17.1.24";
 
             remote.allowAnyHosts = true;
             remote.user = "jenkins";
