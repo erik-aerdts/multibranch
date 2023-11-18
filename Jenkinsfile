@@ -41,7 +41,7 @@ stages {
           steps {
            echo 'Getting source..'
 
-                git branch: 'main',
+                git branch: 'dev',
                   url: 'https://github.com/erik-aerdts/multibranch.git'
                }
         }
