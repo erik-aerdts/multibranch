@@ -57,10 +57,7 @@ stages {
  
 
            steps {
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']])
-                sh """
-                echo "Building Artifact"
-                """
+              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 
                 sh """
                 echo "Deploying Code"
@@ -79,7 +76,7 @@ stages {
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
             }
-            
+            }
    
             
       }
