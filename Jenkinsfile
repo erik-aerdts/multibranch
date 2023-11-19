@@ -58,10 +58,9 @@ stages {
  
 
            steps {
-                sh """
-                echo "Building Artifact"
-                """
 
+
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
                 """
@@ -74,14 +73,16 @@ stages {
             remote.host = "172.17.1.24";
 
             remote.allowAnyHosts = true;
-            remote.user = "jenkins";
-            remote.password = "jenkins";
+            remote.user = USERNAME;
+            remote.password = PASSWORD;
             
             sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
             }
-            
+
+           } 
+
    
             
       }
