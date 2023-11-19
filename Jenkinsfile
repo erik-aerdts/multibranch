@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/fix']], 
+                    branches: [[name: '*/dev']], 
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
@@ -40,7 +40,8 @@ stages {
         stage('Getting source') {
           steps {
            echo 'Getting source..'
-                git branch: 'fix',
+
+                git branch: 'dev',
                   url: 'https://github.com/erik-aerdts/multibranch.git'
                }
         }
@@ -57,8 +58,9 @@ stages {
  
 
            steps {
-              withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
 
+
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
                 """
@@ -67,7 +69,9 @@ stages {
          
             def remote = [:];
             remote.name = "testserver";
-            remote.host = "172.17.1.22";
+
+            remote.host = "172.17.1.23";
+
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
             remote.password = PASSWORD;
@@ -76,7 +80,9 @@ stages {
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
             }
-            }
+
+           } 
+
    
             
       }
