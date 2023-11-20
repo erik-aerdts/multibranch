@@ -117,7 +117,7 @@ stage('Build Deploy Code prod server') {
            script {
          
             def remote = [:];
-            remote.name = "testserver";
+            remote.name = "prodserver";
 
             remote.host = "172.17.1.24";
 
@@ -132,7 +132,29 @@ stage('Build Deploy Code prod server') {
                                              } 
                     }
 
-                               }     
+                               } 
+  stage("rollback if flag error true"){
+        when{
+            expression { env.flagError == "true" }
+        }
+        steps{
+          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+            script {
+         
+            def remote = [:];
+            remote.name = "testserver";
+            remote.host = "172.17.1.23";
+            remote.allowAnyHosts = true;
+            remote.user = USERNAME;
+            remote.password = PASSWORD;
+            
+            sshCommand remote: remote, command: "cp /var/www/html/index.old /var/www/html/index.html"
+            
+            }       
+                 }
+             }
+                                         }
+  }
 }
 
 }
