@@ -89,11 +89,11 @@ stages {
               try {
               input(message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok: 'Proceed')
 
-                  }catch(e){
+                   }catch(e){
                 println "input aborted or timeout expired, will try to rollback."
                 env.flagError = "true"        
-                        }
-                 }
+                             }
+                  }
                }
                            }
 stage('Build Deploy Code') {
@@ -123,5 +123,5 @@ stage('Build Deploy Code') {
 
                                }    
 }
-
+}
 }
