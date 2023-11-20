@@ -54,7 +54,7 @@ stages {
             }
         }
 
-        stage('Build Deploy Code') {
+        stage('Build Deploy Code testserver') {
  
 
            steps {
@@ -96,7 +96,7 @@ stages {
                   }
                }
                            }
-stage('Build Deploy Code') {
+stage('Build Deploy Code prod server') {
            steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
