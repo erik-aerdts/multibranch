@@ -58,6 +58,7 @@ stages {
  
 
            steps {
+
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
@@ -68,7 +69,7 @@ stages {
             def remote = [:];
             remote.name = "testserver";
 
-            remote.host = "172.17.1.23";
+            remote.host = "172.17.1.22";
 
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
@@ -79,9 +80,17 @@ stages {
             
                    }
 
-                                                                       } 
-                }
-        }
+                                             } 
+                    }
+
+                               }    
+          
+
+
+            
+
+
+                                                                       
          stage('validate') {
          steps {
           script {
@@ -102,6 +111,7 @@ stage('Build Deploy Code prod server') {
                 sh """
                 echo "Deploying Code"
                 """
+
 
            script {
          
