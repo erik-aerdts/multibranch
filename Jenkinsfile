@@ -107,10 +107,11 @@ stages {
                }
                            }
 stage('Build Deploy Code prod server') {
-           steps {
-              when{
+         when{
             expression { env.flagError == "false" }
-        }
+        }  
+        steps {
+             
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
