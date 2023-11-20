@@ -81,7 +81,7 @@ stages {
 
                                                                        } 
                 }
-   
+        }
          stage('validate') {
          steps {
           script {
@@ -123,5 +123,5 @@ stage('Build Deploy Code') {
 
                                }    
 }
-}
+
 }
