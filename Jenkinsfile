@@ -58,8 +58,6 @@ stages {
  
 
            steps {
-
-
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
@@ -79,34 +77,27 @@ stages {
             sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
-            }
+                   }
 
-           } 
-
+                                                                       } 
+                }
    
-            
-      }
-
-}    
-stage('validate') {
-        steps {
+         stage('validate') {
+         steps {
           script {
             env.flagError = "false"
               try {
               input(message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok: 'Proceed')
 
-              }catch(e){
+                  }catch(e){
                 println "input aborted or timeout expired, will try to rollback."
                 env.flagError = "true"        
-                       }
+                        }
                  }
-              }
+               }
+                           }
 stage('Build Deploy Code') {
- 
-
            steps {
-
-
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
@@ -126,15 +117,11 @@ stage('Build Deploy Code') {
             sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
-            }
+                   }
+                                             } 
+                    }
 
-           } 
-
-   
-            
-      }
-
-}    
+                               }    
 }
 
 }
