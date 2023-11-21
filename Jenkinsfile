@@ -70,7 +70,7 @@ stages {
             def remote = [:];
             remote.name = "testserver";
 
-            remote.host = "172.17.1.24";
+            remote.host = "172.17.1.22";
 
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
