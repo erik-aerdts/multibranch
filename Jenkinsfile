@@ -46,7 +46,7 @@ stages {
                }
         }
 
-        stage('Code Analysis') {
+        stage('Deploy code DEV server ') {
             steps {
                 sh """
                 echo "Running Code Analysis"
