@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/dev']], 
+                    branches: [[name: '*/main']], 
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
@@ -41,7 +41,7 @@ stages {
           steps {
            echo 'Getting source..'
 
-                git branch: 'dev',
+                git branch: 'main',
                   url: 'https://github.com/erik-aerdts/multibranch.git'
                }
         }
@@ -66,6 +66,7 @@ stages {
                 """
 
           
+
 
 
             
