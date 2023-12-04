@@ -55,22 +55,8 @@ stages {
             }
         }
 
-        stage('Build Deploy Code') {
- 
-
-           steps {
-
-
-              
-
-
-            
-
-
-
-                                             } 
-            }
-        }
+       
+           
 
        
 }
