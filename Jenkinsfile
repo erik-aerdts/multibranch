@@ -47,7 +47,7 @@ stages {
         }
 
    
-       stage('Build Deploy Code testserver') {
+       stage('Build Deploy Code testserver 172.17.1.23') {
  
 
            steps {
