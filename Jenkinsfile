@@ -46,11 +46,43 @@ stages {
                }
         }
 
-        stage('Code Analysis') {
+        stage('Deploy code DEV server ') {
             steps {
                 sh """
                 echo "Running Code Analysis"
                 """
+
+            }
+        }
+
+        stage('Build Deploy Code on 172.17.1.22') {
+ 
+
+        steps {
+
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                sh """
+                echo "Deploying Code"
+                """
+
+           script {
+         
+            def remote = [:];
+            remote.name = "testserver";
+
+            remote.host = "172.17.1.22";
+
+            remote.allowAnyHosts = true;
+            remote.user = USERNAME;
+            remote.password = PASSWORD;
+            
+            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
+            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
+            
+                   }
+
+                                             } 
+                    }
             }
       
         }
