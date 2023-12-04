@@ -51,26 +51,22 @@ stages {
                 sh """
                 echo "Running Code Analysis"
                 """
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh """
-                echo "Deploying Code"
-                """
 
-           script {
-         
-            def remote = [:];
-            remote.name = "testserver";
+            }
+        }
 
-            remote.host = "172.17.1.22";
+        stage('Build Deploy Code') {
+ 
 
-            remote.allowAnyHosts = true;
-            remote.user = USERNAME;
-            remote.password = PASSWORD;
+           steps {
+
+
+              
+
+
             
-            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
-            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
-            
-                   }
+
+
 
                                              } 
             }
