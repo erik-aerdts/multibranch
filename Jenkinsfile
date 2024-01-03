@@ -47,9 +47,42 @@ stages {
         }
 
    
-       stage('Build Deploy Code testserver 172.17.1.23') {
+       stage('Build Deploy Code') {
  
+       echo 'branch name ' + env.BRANCH_NAME
 
+        if (env.BRANCH_NAME.startsWith("fix_")) {
+           echo 'Deploying to Fix environment }
+
+        else if (env.BRANCH_NAME.startsWith("dev_")) {  
+        steps {
+
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+                sh """
+                echo "Deploying Code"
+                """
+
+           script {
+         
+            def remote = [:];
+            remote.name = "testserver";
+
+            remote.host = "172.17.1.22";
+
+            remote.allowAnyHosts = true;
+            remote.user = USERNAME;
+            remote.password = PASSWORD;
+            
+            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
+            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
+            
+                   }
+
+                                             } 
+                    }
+        }
+          else if (env.BRANCH_NAME.startsWith("main_")) { 
+          
            steps {
 
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -148,5 +181,6 @@ stage('Build Deploy Code prod server 172.17.1.24') {
                                          }
   
 }
+       }
 
 }
