@@ -47,6 +47,7 @@ stages {
         }
 
 stage('deploy') {
+  steps{
   echo 'branch name ' + env.BRANCH_NAME
 
   if (env.BRANCH_NAME.startsWith("fix")) {
@@ -55,6 +56,7 @@ stage('deploy') {
    echo "Deploying to Stage after build and Dev Deployment"
   } else if (env.BRANCH_NAME.startsWith("main")) {
    echo "Deploying to PROD environment"
+  }
   }
 }
 }
