@@ -52,7 +52,7 @@ stages {
        echo 'branch name ' + env.BRANCH_NAME
 
         if (env.BRANCH_NAME.startsWith("fix_")) {
-           echo 'Deploying to Fix environment }
+           echo 'Deploying to Fix environment' }
 
         else if (env.BRANCH_NAME.startsWith("dev_")) {  
         steps {
