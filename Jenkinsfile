@@ -51,10 +51,11 @@ stages {
  
        echo 'branch name ' + env.BRANCH_NAME
 
-        if (env.BRANCH_NAME.startsWith("fix_")) {
+        if (env.BRANCH_NAME.startsWith("fix")) {
+          steps {
            echo 'Deploying to Fix environment' }
-
-        else if (env.BRANCH_NAME.startsWith("dev_")) {  
+                }
+        else if (env.BRANCH_NAME.startsWith("dev")) {  
         steps {
 
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -81,7 +82,7 @@ stages {
                                              } 
                     }
         }
-          else if (env.BRANCH_NAME.startsWith("main_")) { 
+          else if (env.BRANCH_NAME.startsWith("main")) { 
           
            steps {
 
