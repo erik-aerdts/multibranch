@@ -48,21 +48,20 @@ stages {
 
    
        stage('Build Deploy Code') {
- 
+       steps {
        echo 'branch name ' + env.BRANCH_NAME
 
         if (env.BRANCH_NAME.startsWith("fix")) {
-          steps {
-           echo 'Deploying to Fix environment' }
-                }
+                        echo 'Deploying to Fix environment' 
+                                                }
+                                               
         else if (env.BRANCH_NAME.startsWith("dev")) {  
-        steps {
+       
 
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
                 """
-
            script {
          
             def remote = [:];
@@ -77,14 +76,12 @@ stages {
             sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
             sshPut remote:remote, from: "index.html", into:'/var/www/html/'
             
-                   }
+                                                        }
 
-                                             } 
+                                                                                                                          } 
                     }
-        }
+        
           else if (env.BRANCH_NAME.startsWith("main")) { 
-          
-           steps {
 
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
@@ -107,15 +104,13 @@ stages {
             
                    }
 
-                                             } 
-                    }
-
-                               }    
-          
-
+                                                                                                  } 
+                                                       }
+       }
                                                                        
          stage('validate') {
          steps {
+            if (env.BRANCH_NAME.startsWith("main")) {
           script {
             env.flagError = "false"
               try {
@@ -128,11 +123,13 @@ stages {
                   }
                }
                            }
+         }
 stage('Build Deploy Code prod server 172.17.1.24') {
          when{
             expression { env.flagError == "false" }
         }  
         steps {
+           if (env.BRANCH_NAME.startsWith("main")) {
              
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
@@ -158,12 +155,14 @@ stage('Build Deploy Code prod server 172.17.1.24') {
                                              } 
                     }
 
+        }
                                } 
   stage("rollback if flag error true"){
         when{
             expression { env.flagError == "true" }
         }
         steps{
+           if (env.BRANCH_NAME.startsWith("main")) {
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
             script {
          
@@ -180,6 +179,7 @@ stage('Build Deploy Code prod server 172.17.1.24') {
                  }
              }
                                          }
+  }
   
 }
        }
