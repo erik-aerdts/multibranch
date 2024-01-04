@@ -46,16 +46,29 @@ stages {
                }
         }
 
-stage('deploy') {
+stage('deploy fix') {
    when          {
       branch fix }
   steps {
   echo 'branch name ' + env.BRANCH_NAME
         }
-   when            {
-        branch dev  }
-  steps { echo 'dev'
+  
+                  }
+  stage('deploy dev') {
+   when          {
+      branch dev }
+  steps {
+  echo 'branch name ' + env.BRANCH_NAME
         }
+  
+                  }
+  stage('deploy main') {
+   when          {
+      branch main }
+  steps {
+  echo 'branch name ' + env.BRANCH_NAME
+        }
+ 
                   }
   
 
