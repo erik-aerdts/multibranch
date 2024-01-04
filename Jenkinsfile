@@ -48,7 +48,7 @@ stages {
 
 stage('deploy fix') {
    when          {
-      branch fix }
+      branch 'fix' }
   steps { sh """
                 echo "Running Code Analysis"
                 """
@@ -57,7 +57,7 @@ stage('deploy fix') {
                   }
   stage('deploy dev') {
    when          {
-      branch dev }
+      branch 'dev' }
   steps { withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
                 echo "Deploying Code"
@@ -83,7 +83,7 @@ stage('deploy fix') {
         }
   stage('deploy test') {
    when          {
-      branch main }
+      branch 'main' }
   steps {
    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
                 sh """
