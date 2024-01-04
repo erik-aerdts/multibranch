@@ -79,6 +79,8 @@ stage('deploy fix') {
         }
   
                   }
+        }
+        }
   stage('deploy test') {
    when          {
       branch main }
@@ -104,6 +106,7 @@ stage('deploy fix') {
         }
  
                   }
+  }
   }
  
 
