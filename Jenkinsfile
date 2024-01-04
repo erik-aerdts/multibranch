@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: '*/main']], 
+                    branches: [[name: '*main']], 
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
@@ -37,7 +37,32 @@ stages {
         }
 
 
-        stage('Getting source') {
+        stage('Getting fix source') {
+          when       {
+             branch 'fix' 
+                      }
+          steps {
+           echo 'Getting source..'
+
+                git branch: 'fix',
+                  url: 'https://github.com/erik-aerdts/multibranch.git'
+               }
+        }
+          stage('Getting dev source') {
+          when       {
+             branch 'dev' 
+                      }
+          steps {
+           echo 'Getting source..'
+
+                git branch: 'dev',
+                  url: 'https://github.com/erik-aerdts/multibranch.git'
+               }
+        }
+      stage('Getting main source') {
+          when       {
+             branch 'main' 
+                      }
           steps {
            echo 'Getting source..'
 
