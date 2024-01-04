@@ -127,7 +127,7 @@ stage('deploy fix') {
 
   stage('deploy production') {
    when          {
-      branch 'fix' }
+      branch 'main' }
   steps { 
              
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
