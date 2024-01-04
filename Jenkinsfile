@@ -47,17 +47,17 @@ stages {
         }
 
 stage('deploy') {
-  steps{
+   when          {
+      branch fix }
+  steps {
   echo 'branch name ' + env.BRANCH_NAME
+        }
+   when            {
+        branch dev  }
+  steps { echo 'dev'
+        }
+                  }
+  
 
-  if (env.BRANCH_NAME.startsWith("fix")) {
-   echo "Deploying to Dev environment after build"
-  } else if (env.BRANCH_NAME.startsWith("dev")) {
-   echo "Deploying to Stage after build and Dev Deployment"
-  } else if (env.BRANCH_NAME.startsWith("main")) {
-   echo "Deploying to PROD environment"
-  }
-  }
-}
 }
 }
