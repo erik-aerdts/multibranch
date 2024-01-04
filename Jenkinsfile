@@ -22,7 +22,7 @@ stages {
             steps {
                 checkout([
                     $class: 'GitSCM', 
-                    branches: [[name: 'main']], [[name: 'dev']],[[name: 'fix']]
+                    branches: [[name: 'main']], [[name: 'dev']],[[name: 'fix']],
                     userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
                 ])
             }
