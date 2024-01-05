@@ -152,6 +152,8 @@ stage('deploy fix') {
 
   stage('deploy production') {
    when          {
+     allOf {
+           expression { env.flagError == "false" 
       branch 'main' }
   steps { 
              
@@ -181,6 +183,8 @@ stage('deploy fix') {
 
   stage("rollback if flag error true"){
         when{
+           allOf {
+             branch 'main'
             expression { env.flagError == "true" }
         }
         steps{
