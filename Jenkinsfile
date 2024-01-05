@@ -152,7 +152,9 @@ stage('deploy fix') {
 
   stage('deploy production') {
    when          {
-      branch 'main' }
+     allOf {
+           expression { env.flagError == "false" }
+      branch 'main' } }
   steps { 
              
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
@@ -181,7 +183,10 @@ stage('deploy fix') {
 
   stage("rollback if flag error true"){
         when{
+           allOf {
+             branch 'main'
             expression { env.flagError == "true" }
+           }
         }
         steps{
           withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
