@@ -93,7 +93,7 @@ stage('deploy fix') {
             def remote = [:];
             remote.name = "testserver";
 
-            remote.host = "172.17.1.22";
+            remote.host = "192.168.233.110";
 
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
@@ -120,7 +120,7 @@ stage('deploy fix') {
             def remote = [:];
             remote.name = "testserver";
 
-            remote.host = "172.17.1.23";
+            remote.host = "192.168.233.111";
 
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
@@ -168,7 +168,7 @@ stage('deploy fix') {
             def remote = [:];
             remote.name = "prodserver";
 
-            remote.host = "172.17.1.24";
+            remote.host = "192.168.233.112";
 
             remote.allowAnyHosts = true;
             remote.user = USERNAME;
