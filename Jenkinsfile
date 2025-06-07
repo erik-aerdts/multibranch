@@ -28,14 +28,6 @@ stages {
             }
         }
 
-        stage(' Unit Testing') {
-            steps {
-                sh """
-                echo "Running Unit Tests"
-                """
-            }
-        }
-
 
         stage('Getting fix source') {
           when       {
@@ -71,6 +63,14 @@ stages {
                }
         }
 
+  stage('HTML Testing') {
+    steps {
+        sh """
+        echo "Running HTML validation with tidy"
+        tidy -qe index.html
+        """
+    }
+}
 stage('deploy fix') {
    when          {
       branch 'fix' }
