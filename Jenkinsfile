@@ -19,49 +19,14 @@ stages {
         }
 
         stage('Code Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: 'https://github.com/erik-aerdts/multibranch.git']]
-                ])
-            }
+          
+      steps {
+        echo "Checking out source code for branch: ${env.BRANCH_NAME}"
+        checkout scm
+        }
         }
 
 
-        stage('Getting fix source') {
-          when       {
-             branch 'fix' 
-                      }
-          steps {
-           echo 'Getting source..'
-
-                git branch: 'fix',
-                  url: 'https://github.com/erik-aerdts/multibranch.git'
-               }
-        }
-          stage('Getting dev source') {
-          when       {
-             branch 'dev' 
-                      }
-          steps {
-           echo 'Getting source..'
-
-                git branch: 'dev',
-                  url: 'https://github.com/erik-aerdts/multibranch.git'
-               }
-        }
-      stage('Getting main source') {
-          when       {
-             branch 'main' 
-                      }
-          steps {
-           echo 'Getting source..'
-
-                git branch: 'main',
-                  url: 'https://github.com/erik-aerdts/multibranch.git'
-               }
-        }
 
   stage('HTML Testing') {
     steps {
