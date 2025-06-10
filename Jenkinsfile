@@ -80,8 +80,8 @@ stages {
 
         sshagent(credentials: ['deploy-key']) {
           sh """
-            ssh -o StrictHostKeyChecking=no deploy@${targetHost} "cp /var/www/html/index.html /var/www/html/index.old -f"
-            scp index.html deploy@${targetHost}:/var/www/html/
+            ssh -o StrictHostKeyChecking=no jenkins@${targetHost} "cp /var/www/html/index.html /var/www/html/index.old -f"
+            scp index.html jenkins@${targetHost}:/var/www/html/
           """
         }
       } else {
@@ -91,7 +91,7 @@ stages {
 
           sshagent(credentials: ['deploy-key']) {
             sh """
-              ssh -o StrictHostKeyChecking=no deploy@${targetHost} "cp /var/www/html/index.old /var/www/html/index.html"
+              ssh -o StrictHostKeyChecking=no jenkins@${targetHost} "cp /var/www/html/index.old /var/www/html/index.html"
             """
           }
           currentBuild.result = 'ABORTED'
