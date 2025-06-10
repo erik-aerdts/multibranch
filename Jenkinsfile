@@ -36,141 +36,70 @@ stages {
         """
     }
 }
-stage('deploy fix') {
-   when          {
-      branch 'fix' }
-  steps { sh """
-                echo "Running Code Analysis"
-                """
-        }
+
   
-                  }
-  stage('deploy dev') {
-   when          {
-      branch 'dev' }
-  steps { withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh """
-                echo "Deploying Code"
-                """
-
-           script {
-         
-            def remote = [:];
-            remote.name = "testserver";
-
-            remote.host = "172.17.1.111";
-
-            remote.allowAnyHosts = true;
-            remote.user = USERNAME;
-            remote.password = PASSWORD;
-            
-            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
-            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
-        }
-  
-                  }
-        }
-        }
-  stage('deploy test') {
-   when          {
-      branch 'main' }
+                
+ stage('Deploy') {
+  when {
+    anyOf {
+      branch 'dev'
+      branch 'test'
+      branch 'main'
+    }
+  }
   steps {
-   withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh """
-                echo "Deploying Code"
-                """
+    script {
+      def envMap = [
+        dev : '172.17.1.111',
+        test: '172.17.1.112',
+        main: '172.17.1.113'  // productie
+      ]
+      def currentEnv = env.BRANCH_NAME
+      def targetHost = envMap[currentEnv]
+      def rollbackTriggered = false
 
-           script {
-         
-            def remote = [:];
-            remote.name = "testserver";
+      echo "Deploy to: ${currentEnv} (${targetHost})"
 
-            remote.host = "172.17.1.112";
-
-            remote.allowAnyHosts = true;
-            remote.user = USERNAME;
-            remote.password = PASSWORD;
-            
-            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
-            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
-        }
- 
-                  }
-  }
-  }
- stage('Validate') {
-   when          {
-      branch 'main' }
-  steps { 
-          script {
-            env.flagError = "false"
-              try {
-              input(message: 'Please validate, this job will automatically ABORTED after 30 minutes even if no user input provided', ok: 'Proceed')
-
-                   }catch(e){
-                println "input aborted or timeout expired, will try to rollback."
-                env.flagError = "true"        
-                             }
-                  }
+      // Alleen voor productie: input-bevestiging
+      if (currentEnv == 'main') {
+        try {
+          timeout(time: 30, unit: 'MINUTES') {
+            input(
+              message: "Bevestig deployment naar **PRODUKTIE** (${targetHost}). De job wordt automatisch geannuleerd na 30 minuten.",
+              ok: "Deploy"
+            )
           }
-                         }   
-
-  stage('deploy production') {
-   when          {
-     allOf {
-           expression { env.flagError == "false" }
-      branch 'main' } }
-  steps { 
-             
-                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-                sh """
-                echo "Deploying Code"
-                """
-
-
-           script {
-         
-            def remote = [:];
-            remote.name = "prodserver";
-
-            remote.host = "172.17.1.113";
-
-            remote.allowAnyHosts = true;
-            remote.user = USERNAME;
-            remote.password = PASSWORD;
-            
-            sshCommand remote: remote, command: "cp /var/www/html/index.html /var/www/html/index.old -f"
-            sshPut remote:remote, from: "index.html", into:'/var/www/html/'
-                  }   
-                }
+        } catch (err) {
+          echo "Input afgebroken of timeout verlopen. Start rollback..."
+          rollbackTriggered = true
         }
-                                 }
+      }
 
-  stage("rollback if flag error true"){
-        when{
-           allOf {
-             branch 'main'
-            expression { env.flagError == "true" }
-           }
+      if (!rollbackTriggered) {
+        echo "Uitrollen naar ${currentEnv}..."
+
+        sshagent(credentials: ['deploy-key']) {
+          sh """
+            ssh -o StrictHostKeyChecking=no deploy@${targetHost} "cp /var/www/html/index.html /var/www/html/index.old -f"
+            scp index.html deploy@${targetHost}:/var/www/html/
+          """
         }
-        steps{
-          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId:'jenkins', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-            script {
-         
-            def remote = [:];
-            remote.name = "testserver";
-            remote.host = "172.17.1.112";
-            remote.allowAnyHosts = true;
-            remote.user = USERNAME;
-            remote.password = PASSWORD;
-            
-            sshCommand remote: remote, command: "cp /var/www/html/index.old /var/www/html/index.html"
-            
-            }       
-                 }
-             }
-                                         }
+      } else {
+        // Rollback op productie
+        if (currentEnv == 'main') {
+          echo "Rollback naar oude versie op ${targetHost}"
 
+          sshagent(credentials: ['deploy-key']) {
+            sh """
+              ssh -o StrictHostKeyChecking=no deploy@${targetHost} "cp /var/www/html/index.old /var/www/html/index.html"
+            """
+          }
+          currentBuild.result = 'ABORTED'
+        }
+      }
+    }
+  }
+}
 }
 }
 
